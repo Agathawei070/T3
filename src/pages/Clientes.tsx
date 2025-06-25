@@ -16,37 +16,103 @@ interface ClientesState {
   clientes: Cliente[];
 }
 
-class Clientes extends Component<{}, ClientesState> {
-  state: ClientesState = {
-    busca: '',
-    novoCliente: {
-      nome: '',
-      email: '',
-      telefone: '',
-      cpf: '',
-      dataCadastro: '',
-      observacoes: '',
+class Clientes extends Component<{}, ClientesState & { clienteSelecionado: Cliente | null }> {
+  state: ClientesState & { clienteSelecionado: Cliente | null } = {
+    ...{
+      busca: '',
+      novoCliente: {
+        nome: '',
+        email: '',
+        telefone: '',
+        cpf: '',
+        dataCadastro: '',
+        observacoes: '',
+      },
+      exibirFormulario: false,
+      clientes: [
+        {
+          nome: "João Silva",
+          email: "joao.silva@email.com",
+          telefone: "(11) 98765-4321",
+          cpf: "123.456.789-00",
+          dataCadastro: "2024-01-15",
+          observacoes: "Cliente VIP",
+        },
+        {
+          nome: "Maria Santos",
+          email: "maria.santos@email.com",
+          telefone: "(11) 91234-5678",
+          cpf: "987.654.321-00",
+          dataCadastro: "2024-02-01",
+          observacoes: "Prefere atendimento pela manhã",
+        },
+        {
+          nome: "Carlos Lima",
+          email: "carlos.lima@email.com",
+          telefone: "(21) 99876-5432",
+          cpf: "321.654.987-00",
+          dataCadastro: "2024-03-10",
+          observacoes: "Tem dois pets cadastrados",
+        },
+        {
+          nome: "Ana Oliveira",
+          email: "ana.oliveira@email.com",
+          telefone: "(31) 98712-3456",
+          cpf: "456.123.789-00",
+          dataCadastro: "2024-03-22",
+          observacoes: "Cliente frequente",
+        },
+        {
+          nome: "Pedro Souza",
+          email: "pedro.souza@email.com",
+          telefone: "(41) 99999-8888",
+          cpf: "789.456.123-00",
+          dataCadastro: "2024-04-05",
+          observacoes: "Solicitou orçamento para banho e tosa",
+        },
+        {
+          nome: "Fernanda Dias",
+          email: "fernanda.dias@email.com",
+          telefone: "(51) 98888-7777",
+          cpf: "654.321.987-00",
+          dataCadastro: "2024-04-18",
+          observacoes: "Indicada por outro cliente",
+        },
+        {
+          nome: "Lucas Costa",
+          email: "lucas.costa@email.com",
+          telefone: "(61) 97777-6666",
+          cpf: "852.963.741-00",
+          dataCadastro: "2024-05-02",
+          observacoes: "Prefere contato por WhatsApp",
+        },
+        {
+          nome: "Juliana Rocha",
+          email: "juliana.rocha@email.com",
+          telefone: "(71) 96666-5555",
+          cpf: "963.852.741-00",
+          dataCadastro: "2024-05-15",
+          observacoes: "Tem alergia a alguns produtos",
+        },
+        {
+          nome: "Rafael Alves",
+          email: "rafael.alves@email.com",
+          telefone: "(81) 95555-4444",
+          cpf: "741.852.963-00",
+          dataCadastro: "2024-06-01",
+          observacoes: "Cliente novo",
+        },
+        {
+          nome: "Paula Mendes",
+          email: "paula.mendes@email.com",
+          telefone: "(91) 94444-3333",
+          cpf: "159.357.258-00",
+          dataCadastro: "2024-06-10",
+          observacoes: "Solicitou agendamento para vacinação",
+        }
+      ]
     },
-    exibirFormulario: false,
-    clientes: [
-      {
-        nome: "João Silva",
-        email: "joao.silva@email.com",
-        telefone: "(11) 98765-4321",
-        cpf: "123.456.789-00",
-        dataCadastro: "2024-01-15",
-        observacoes: "Cliente VIP",
-      },
-      {
-        nome: "Maria Santos",
-        email: "maria.santos@email.com",
-        telefone: "(11) 91234-5678",
-        cpf: "987.654.321-00",
-        dataCadastro: "2024-02-01",
-        observacoes: "Prefere atendimento pela manhã",
-      },
-      // outros clientes...
-    ]
+    clienteSelecionado: null
   };
 
   handleBuscaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,8 +154,16 @@ class Clientes extends Component<{}, ClientesState> {
     }));
   };
 
+  abrirModalDetalhes = (cliente: Cliente) => {
+    this.setState({ clienteSelecionado: cliente });
+  };
+
+  fecharModalDetalhes = () => {
+    this.setState({ clienteSelecionado: null });
+  };
+
   render() {
-    const { busca, clientes, exibirFormulario, novoCliente } = this.state;
+    const { busca, clientes, exibirFormulario, novoCliente, clienteSelecionado } = this.state;
 
     const clientesFiltrados = clientes.filter(cliente =>
       cliente.nome.toLowerCase().includes(busca.toLowerCase())
@@ -200,12 +274,49 @@ class Clientes extends Component<{}, ClientesState> {
                     <p><strong>Observações:</strong> {cliente.observacoes}</p>
                   </div>
                   <div className="card-footer text-center bg-white border-0">
-                    <button className="btn btn-outline-dark btn-sm">Ver Detalhes</button>
+                    <button
+                      className="btn btn-outline-dark btn-sm"
+                      onClick={() => this.abrirModalDetalhes(cliente)}
+                    >
+                      Ver Detalhes
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Modal de Detalhes */}
+          {clienteSelecionado && (
+            <div className="modal fade show d-block" tabIndex={-1} style={{ background: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog">
+                <div className="modal-content bg-white text-dark">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Detalhes do Cliente</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={this.fecharModalDetalhes}
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <p><strong>Nome:</strong> {clienteSelecionado.nome}</p>
+                    <p><strong>E-mail:</strong> {clienteSelecionado.email}</p>
+                    <p><strong>Telefone:</strong> {clienteSelecionado.telefone}</p>
+                    <p><strong>CPF:</strong> {clienteSelecionado.cpf}</p>
+                    <p><strong>Data de Cadastro:</strong> {clienteSelecionado.dataCadastro}</p>
+                    <p><strong>Observações:</strong> {clienteSelecionado.observacoes}</p>
+                  </div>
+                  <div className="modal-footer bg-white">
+                    <button className="btn btn-secondary" onClick={this.fecharModalDetalhes}>
+                      Fechar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     );

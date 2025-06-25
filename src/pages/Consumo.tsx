@@ -88,6 +88,74 @@ export default class ListaVendas extends Component<{}, State> {
         ],
         total: 299.80,
         status: 'Concluída'
+      },
+      {
+        id: 2,
+        data: '2025-06-23',
+        cliente: 'João Silva',
+        formaPagamento: 'Cartão',
+        itens: [
+          {
+            itemId: 1,
+            tipo: 'Produto',
+            nome: 'Ração Premium',
+            quantidade: 1,
+            precoUnitario: 89.90
+          }
+        ],
+        total: 89.90,
+        status: 'Concluída'
+      },
+      {
+        id: 3,
+        data: '2025-06-24',
+        cliente: 'Maria Santos',
+        formaPagamento: 'Pix',
+        itens: [
+          {
+            itemId: 2,
+            tipo: 'Serviço',
+            nome: 'Banho e Tosa',
+            quantidade: 2,
+            precoUnitario: 120.00
+          }
+        ],
+        total: 240.00,
+        status: 'Concluída'
+      },
+      {
+        id: 4,
+        data: '2025-06-25',
+        cliente: 'Pedro Oliveira',
+        formaPagamento: 'Dinheiro',
+        itens: [
+          {
+            itemId: 1,
+            tipo: 'Produto',
+            nome: 'Ração Premium',
+            quantidade: 3,
+            precoUnitario: 89.90
+          }
+        ],
+        total: 269.70,
+        status: 'Pendente'
+      },
+      {
+        id: 5,
+        data: '2025-06-25',
+        cliente: 'Maria Oliveira',
+        formaPagamento: 'Cartão',
+        itens: [
+          {
+            itemId: 2,
+            tipo: 'Serviço',
+            nome: 'Banho e Tosa',
+            quantidade: 1,
+            precoUnitario: 120.00
+          }
+        ],
+        total: 120.00,
+        status: 'Concluída'
       }
     ],
     mostrarFormulario: false,
@@ -212,9 +280,9 @@ export default class ListaVendas extends Component<{}, State> {
     return (
       <div className="container-fluid min-vh-100 bg-dark text-light py-5">
         <div className="container">
-          <h3 className="fw-bold">Lista de Vendas</h3>
-          {!mostrarFormulario && (
-            <div className="d-flex justify-content-end mb-3">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="fw-bold mb-0">Lista de Vendas</h3>
+            {!mostrarFormulario && (
               <button
                 className="btn text-dark fw-semibold"
                 style={{ background: '#0dcaf0', border: 'none' }}
@@ -222,92 +290,56 @@ export default class ListaVendas extends Component<{}, State> {
               >
                 <i className="bi bi-plus-circle"></i> Nova Venda
               </button>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Espaçamento entre o título e a lista */}
+          <div className="mb-4"></div>
 
           {!mostrarFormulario ? (
-            <>
-              <table className="table table-bordered bg-white text-dark">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Data</th>
-                    <th>Cliente</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Forma de Pagamento</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <div className="row justify-content-center">
+              <div className="col-12 col-lg-10">
+                <ul className="list-group mb-4">
                   {vendas.map((v, index) => (
-                    <tr key={v.id}>
-                      <td>#{v.id}</td>
-                      <td>{new Date(v.data).toLocaleDateString()}</td>
-                      <td>{v.cliente}</td>
-                      <td>R$ {v.total.toFixed(2)}</td>
-                      <td><span className="badge bg-success">{v.status}</span></td>
-                      <td>{v.formaPagamento}</td>
-                      <td>
-                        <button className="btn btn-outline-dark btn-sm" onClick={() => this.visualizarVenda(index)}>
-                          <i className="bi bi-eye"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {vendaSelecionada && (
-                <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                  <div className="modal-dialog modal-lg">
-                    <div className="modal-content bg-white text-dark">
-                      <div className="modal-header">
-                        <h5 className="modal-title">Detalhes da Venda #{vendaSelecionada.id}</h5>
-                        <button type="button" className="btn-close" onClick={() => this.setState({ vendaSelecionada: null })}></button>
-                      </div>
-                      <div className="modal-body">
-                        <p><strong>Data:</strong> {new Date(vendaSelecionada.data).toLocaleDateString()}</p>
-                        <p><strong>Cliente:</strong> {vendaSelecionada.cliente}</p>
-                        <p><strong>Forma de Pagamento:</strong> {vendaSelecionada.formaPagamento}</p>
-                        <p><strong>Status:</strong> {vendaSelecionada.status}</p>
-                        <table className="table mt-3">
-                          <thead>
-                            <tr>
-                              <th>Tipo</th>
-                              <th>Item</th>
-                              <th>Quantidade</th>
-                              <th>Preço Unitário</th>
-                              <th>Subtotal</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {vendaSelecionada.itens.map((item, i) => (
-                              <tr key={i}>
-                                <td>{item.tipo}</td>
-                                <td>{item.nome}</td>
-                                <td>{item.quantidade}</td>
-                                <td>R$ {item.precoUnitario.toFixed(2)}</td>
-                                <td>R$ {(item.precoUnitario * item.quantidade).toFixed(2)}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        <div className="text-end">
-                          <strong>Total: R$ {vendaSelecionada.total.toFixed(2)}</strong>
+                    <li
+                      key={v.id}
+                      className="list-group-item bg-white text-dark mb-3 shadow-sm rounded-4 border-0 px-3 py-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between"
+                      style={{ transition: 'box-shadow 0.2s' }}
+                    >
+                      <div className="d-flex flex-column flex-md-row align-items-md-center gap-3 flex-grow-1">
+                        <span className="badge bg-info text-dark fs-6 px-3 py-2 mb-2 mb-md-0">
+                          #{v.id}
+                        </span>
+                        <div>
+                          <strong className="me-2">Cliente:</strong>
+                          {v.cliente}
+                        </div>
+                        <div>
+                          <strong className="me-2">Data:</strong>
+                          {new Date(v.data).toLocaleDateString()}
+                        </div>
+                        <div>
+                          <strong className="me-2">Total:</strong>
+                          R$ {v.total.toFixed(2)}
+                        </div>
+                        <div>
+                          <span className="badge bg-success">{v.status}</span>
                         </div>
                       </div>
-                      <div className="modal-footer bg-white">
-                        <button className="btn btn-secondary" onClick={() => this.setState({ vendaSelecionada: null })}>Fechar</button>
-                        <button className="btn btn-warning" onClick={this.editarVenda}>
-                          <i className="bi bi-pencil"></i> Editar Venda
+                      <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
+                        <button
+                          className="btn btn-outline-dark btn-sm"
+                          onClick={() => this.visualizarVenda(index)}
+                          title="Ver detalhes"
+                        >
+                          <i className="bi bi-eye"></i>
                         </button>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           ) : (
             <div className="card bg-white text-dark">
               <div className="card-header">
@@ -444,6 +476,66 @@ export default class ListaVendas extends Component<{}, State> {
               </div>
             </div>
           )}
+
+          {/* Modal de Visualizar Venda */}
+          {vendaSelecionada && (
+            <div className="modal fade show d-block" tabIndex={-1} style={{ background: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog modal-lg">
+                <div className="modal-content bg-white text-dark">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Detalhes da Venda #{vendaSelecionada.id}</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => this.setState({ vendaSelecionada: null })}
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <p><strong>Cliente:</strong> {vendaSelecionada.cliente}</p>
+                    <p><strong>Data:</strong> {new Date(vendaSelecionada.data).toLocaleDateString()}</p>
+                    <p><strong>Forma de Pagamento:</strong> {vendaSelecionada.formaPagamento}</p>
+                    <p><strong>Status:</strong> <span className="badge bg-success">{vendaSelecionada.status}</span></p>
+                    <hr />
+                    <h6>Itens da Venda:</h6>
+                    <table className="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tipo</th>
+                          <th>Item</th>
+                          <th>Quantidade</th>
+                          <th>Preço Unitário</th>
+                          <th>Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {vendaSelecionada.itens.map((item, i) => (
+                          <tr key={i}>
+                            <td>{item.tipo}</td>
+                            <td>{item.nome}</td>
+                            <td>{item.quantidade}</td>
+                            <td>R$ {item.precoUnitario.toFixed(2)}</td>
+                            <td>R$ {(item.precoUnitario * item.quantidade).toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <div className="text-end">
+                      <strong>Total: R$ {vendaSelecionada.total.toFixed(2)}</strong>
+                    </div>
+                  </div>
+                  <div className="modal-footer bg-white">
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => this.setState({ vendaSelecionada: null })}
+                    >
+                      Fechar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     );

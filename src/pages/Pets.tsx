@@ -15,33 +15,92 @@ interface PetsState {
   pets: Pet[];
 }
 
-class Pets extends Component<{}, PetsState> {
-  state: PetsState = {
-    busca: '',
-    novoPet: {
-      nome: '',
-      especie: '',
-      dono: '',
-      dataCadastro: '',
-      observacoes: '',
+class Pets extends Component<{}, PetsState & { petSelecionado: Pet | null }> {
+  state: PetsState & { petSelecionado: Pet | null } = {
+    ...{
+      busca: '',
+      novoPet: {
+        nome: '',
+        especie: '',
+        dono: '',
+        dataCadastro: '',
+        observacoes: '',
+      },
+      exibirFormulario: false,
+      pets: [
+        {
+          nome: "Thor",
+          especie: "Cachorro",
+          dono: "João Silva",
+          dataCadastro: "2024-01-01",
+          observacoes: "Raça: Golden Retriever",
+        },
+        {
+          nome: "Luna",
+          especie: "Gato",
+          dono: "Maria Santos",
+          dataCadastro: "2024-02-10",
+          observacoes: "Muito arisca com estranhos",
+        },
+        {
+          nome: "Max",
+          especie: "Cachorro",
+          dono: "Carlos Lima",
+          dataCadastro: "2024-03-05",
+          observacoes: "Raça: Poodle, gosta de brincar",
+        },
+        {
+          nome: "Mel",
+          especie: "Gato",
+          dono: "Ana Oliveira",
+          dataCadastro: "2024-03-22",
+          observacoes: "Raça: Siamês, adora carinho",
+        },
+        {
+          nome: "Bob",
+          especie: "Cachorro",
+          dono: "Pedro Souza",
+          dataCadastro: "2024-04-10",
+          observacoes: "Raça: Bulldog, precisa de cuidados especiais",
+        },
+        {
+          nome: "Nina",
+          especie: "Gato",
+          dono: "Fernanda Dias",
+          dataCadastro: "2024-04-18",
+          observacoes: "Raça: Persa, muito dócil",
+        },
+        {
+          nome: "Simba",
+          especie: "Cachorro",
+          dono: "Lucas Costa",
+          dataCadastro: "2024-05-02",
+          observacoes: "Raça: Labrador, energético",
+        },
+        {
+          nome: "Mia",
+          especie: "Gato",
+          dono: "Juliana Rocha",
+          dataCadastro: "2024-05-15",
+          observacoes: "Raça: Maine Coon, gosta de altura",
+        },
+        {
+          nome: "Pipoca",
+          especie: "Cachorro",
+          dono: "Rafael Alves",
+          dataCadastro: "2024-06-01",
+          observacoes: "Raça: Shih-tzu, amigável com crianças",
+        },
+        {
+          nome: "Tigrinho",
+          especie: "Gato",
+          dono: "Paula Mendes",
+          dataCadastro: "2024-06-10",
+          observacoes: "Raça: SRD, adora brincar com bolinhas",
+        }
+      ]
     },
-    exibirFormulario: false,
-    pets: [
-      {
-        nome: "Thor",
-        especie: "Cachorro",
-        dono: "João Silva",
-        dataCadastro: "2024-01-01",
-        observacoes: "Raça: Golden Retriever",
-      },
-      {
-        nome: "Luna",
-        especie: "Gato",
-        dono: "Maria Santos",
-        dataCadastro: "2024-02-10",
-        observacoes: "Muito arisca com estranhos",
-      },
-    ]
+    petSelecionado: null
   };
 
   handleBuscaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,8 +141,16 @@ class Pets extends Component<{}, PetsState> {
     }));
   };
 
+  abrirModalDetalhes = (pet: Pet) => {
+    this.setState({ petSelecionado: pet });
+  };
+
+  fecharModalDetalhes = () => {
+    this.setState({ petSelecionado: null });
+  };
+
   render() {
-    const { busca, pets, exibirFormulario, novoPet } = this.state;
+    const { busca, pets, exibirFormulario, novoPet, petSelecionado } = this.state;
 
     const petsFiltrados = pets.filter(pet =>
       pet.nome.toLowerCase().includes(busca.toLowerCase())
@@ -182,12 +249,47 @@ class Pets extends Component<{}, PetsState> {
                     <p><strong>Observações:</strong> {pet.observacoes}</p>
                   </div>
                   <div className="card-footer text-center bg-white border-0">
-                    <button className="btn btn-outline-dark btn-sm">Ver Detalhes</button>
+                    <button
+                      className="btn btn-outline-dark btn-sm"
+                      onClick={() => this.abrirModalDetalhes(pet)}
+                    >
+                      Ver Detalhes
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Modal de Detalhes */}
+          {petSelecionado && (
+            <div className="modal fade show d-block" tabIndex={-1} style={{ background: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog">
+                <div className="modal-content bg-white text-dark">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Detalhes do Pet</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={this.fecharModalDetalhes}
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <p><strong>Nome:</strong> {petSelecionado.nome}</p>
+                    <p><strong>Espécie:</strong> {petSelecionado.especie}</p>
+                    <p><strong>Dono:</strong> {petSelecionado.dono}</p>
+                    <p><strong>Data de Cadastro:</strong> {petSelecionado.dataCadastro}</p>
+                    <p><strong>Observações:</strong> {petSelecionado.observacoes}</p>
+                  </div>
+                  <div className="modal-footer bg-white">
+                    <button className="btn btn-secondary" onClick={this.fecharModalDetalhes}>
+                      Fechar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
