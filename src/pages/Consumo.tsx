@@ -245,6 +245,13 @@ function ListaVendas () {
     setIndexEdicao(index)
   }
 
+  // Função para excluir venda
+  const handleExcluirVenda = (id: number) => {
+    if (window.confirm("Tem certeza que deseja excluir esta venda?")) {
+      setVendas((prev) => prev.filter((v) => v.id !== id))
+      fecharModal()
+    }
+  }
 
   const cancelarFormulario = () => {
     setMostrarFormulario(false)
@@ -318,6 +325,13 @@ function ListaVendas () {
                         title="Ver detalhes"
                       >
                         <i className="bi bi-eye"></i>
+                      </button>
+                      <button
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={() => handleExcluirVenda(v.id)}
+                        title="Excluir venda"
+                      >
+                        <i className="bi bi-trash"></i>
                       </button>
                     </div>
                   </li>
@@ -497,6 +511,9 @@ function ListaVendas () {
                   </div>
                 </div>
                 <div className="modal-footer bg-white">
+                  <button className="btn btn-danger me-auto" onClick={() => handleExcluirVenda(vendaSelecionada.id)}>
+                    <i className="bi bi-trash me-1"></i> Excluir
+                  </button>
                   <button className="btn btn-secondary" onClick={fecharModal}>
                     Fechar
                   </button>

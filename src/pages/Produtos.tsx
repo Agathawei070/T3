@@ -77,6 +77,13 @@ function Produtos () {
     abrirModal({ id: 0, nome: "", categoria: "", preco: 0, estoque: 0 }, true)
   }
 
+  const handleExcluirProduto = (produto: Produto) => {
+    if (window.confirm(`Tem certeza que deseja excluir o produto "${produto.nome}"?`)) {
+      setProdutos((prev) => prev.filter((p) => p.id !== produto.id))
+      fecharModal()
+    }
+  }
+
   return (
     <div className="container-fluid min-vh-100 bg-dark text-light py-5">
       <div className="container">
@@ -113,6 +120,9 @@ function Produtos () {
                   </button>
                   <button className="btn btn-outline-warning btn-sm" onClick={() => abrirModal(p, true)}>
                     <i className="bi bi-pencil"></i>
+                  </button>
+                  <button className="btn btn-outline-danger btn-sm" onClick={() => handleExcluirProduto(p)}>
+                    <i className="bi bi-trash"></i>
                   </button>
                 </div>
               </div>
@@ -205,6 +215,14 @@ function Produtos () {
                         <p>
                           <strong>Estoque:</strong> {produtoSelecionado.estoque}
                         </p>
+                        <div className="text-end">
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => handleExcluirProduto(produtoSelecionado)}
+                          >
+                            <i className="bi bi-trash me-1"></i> Excluir
+                          </button>
+                        </div>
                       </div>
                     )
                   )}

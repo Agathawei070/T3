@@ -9,100 +9,106 @@ interface Cliente {
   cpf: string
   dataCadastro: string
   observacoes: string
+  endereco?: {
+    estado?: string
+    cidade?: string
+    bairro?: string
+    rua?: string
+    numero?: string
+    complemento?: string
+    cep?: string
+    ddd?: string
+    nomeSocial?: string
+  }
+  pets?: {
+    nome: string
+    tipo: string
+    raca: string
+    genero: string
+  }[]
 }
 
-function Clientes () {
+const CLIENTE_VAZIO: Cliente = {
+  nome: "",
+  email: "",
+  telefone: "",
+  cpf: "",
+  dataCadastro: "",
+  observacoes: "",
+  endereco: {
+    estado: "",
+    cidade: "",
+    bairro: "",
+    rua: "",
+    numero: "",
+    complemento: "",
+    cep: "",
+    ddd: "",
+    nomeSocial: "",
+  },
+  pets: [],
+}
+
+function Clientes() {
   const [busca, setBusca] = useState("")
   const [exibirFormulario, setExibirFormulario] = useState(false)
   const [clienteSelecionado, setClienteSelecionado] = useState<Cliente | null>(null)
-  const [novoCliente, setNovoCliente] = useState<Cliente>({
-    nome: "",
-    email: "",
-    telefone: "",
-    cpf: "",
-    dataCadastro: "",
-    observacoes: "",
-  })
+  const [editando, setEditando] = useState<Cliente | null>(null)
+  const [novoCliente, setNovoCliente] = useState<Cliente>({ ...CLIENTE_VAZIO })
   const [clientes, setClientes] = useState<Cliente[]>([
     {
-      nome: "João Silva",
-      email: "joao.silva@email.com",
-      telefone: "(11) 98765-4321",
-      cpf: "123.456.789-00",
-      dataCadastro: "2024-01-15",
-      observacoes: "Cliente VIP",
+      nome: "Agatha Wei",
+      email: "agatha.wei@gmail.com",
+      telefone: "(12) 981613594",
+      cpf: "48044195866",
+      dataCadastro: "2025-06-29",
+      observacoes: "",
+      endereco: {
+        estado: "SP",
+        cidade: "São Jose dos Campos",
+        bairro: "Jardim Por do Sol",
+        rua: "Sergio Gonzaga de Azevedo",
+        numero: "201",
+        complemento: "Casa",
+        cep: "12241340",
+        ddd: "12",
+        nomeSocial: "",
+      },
+      pets: [
+        {
+          nome: "Buddy Nelson",
+          tipo: "Cão",
+          raca: "Fox Paulistinha",
+          genero: "Macho",
+        },
+      ],
     },
     {
-      nome: "Maria Santos",
-      email: "maria.santos@email.com",
-      telefone: "(11) 91234-5678",
-      cpf: "987.654.321-00",
-      dataCadastro: "2024-02-01",
-      observacoes: "Prefere atendimento pela manhã",
-    },
-    {
-      nome: "Carlos Lima",
-      email: "carlos.lima@email.com",
-      telefone: "(21) 99876-5432",
-      cpf: "321.654.987-00",
-      dataCadastro: "2024-03-10",
-      observacoes: "Tem dois pets cadastrados",
-    },
-    {
-      nome: "Ana Oliveira",
-      email: "ana.oliveira@email.com",
-      telefone: "(31) 98712-3456",
-      cpf: "456.123.789-00",
-      dataCadastro: "2024-03-22",
-      observacoes: "Cliente frequente",
-    },
-    {
-      nome: "Pedro Souza",
-      email: "pedro.souza@email.com",
-      telefone: "(41) 99999-8888",
-      cpf: "789.456.123-00",
-      dataCadastro: "2024-04-05",
-      observacoes: "Solicitou orçamento para banho e tosa",
-    },
-    {
-      nome: "Fernanda Dias",
-      email: "fernanda.dias@email.com",
-      telefone: "(51) 98888-7777",
-      cpf: "654.321.987-00",
-      dataCadastro: "2024-04-18",
-      observacoes: "Indicada por outro cliente",
-    },
-    {
-      nome: "Lucas Costa",
-      email: "lucas.costa@email.com",
-      telefone: "(61) 97777-6666",
-      cpf: "852.963.741-00",
-      dataCadastro: "2024-05-02",
-      observacoes: "Prefere contato por WhatsApp",
-    },
-    {
-      nome: "Juliana Rocha",
-      email: "juliana.rocha@email.com",
-      telefone: "(71) 96666-5555",
-      cpf: "963.852.741-00",
-      dataCadastro: "2024-05-15",
-      observacoes: "Tem alergia a alguns produtos",
-    },
-    {
-      nome: "Rafael Alves",
-      email: "rafael.alves@email.com",
-      telefone: "(81) 95555-4444",
-      cpf: "741.852.963-00",
-      dataCadastro: "2024-06-01",
-      observacoes: "Cliente novo",
-    },
-    {
-      nome: "Paula Mendes",
-      email: "paula.mendes@email.com",
-      telefone: "(91) 94444-3333",
-      cpf: "159.357.258-00",
-      dataCadastro: "2024-06-10",
-      observacoes: "Solicitou agendamento para vacinação",
+      nome: "Yun Yun Wei",
+      email: "Yunyunwei@live.com",
+      telefone: "(12) 982168303",
+      cpf: "360593000000",
+      dataCadastro: "2025-06-29",
+      observacoes: "",
+      endereco: {
+        estado: "SP",
+        cidade: "São Jose dos Campos",
+        bairro: "Jardim Por do Sol",
+        rua: "Sergio Gonzaga de Azevedo",
+        numero: "201",
+        complemento: "Casa",
+        cep: "12241340",
+        ddd: "12",
+        nomeSocial: "",
+      },
+      pets: [
+        {
+          nome: "Bartolomeu",
+          tipo: "Gato",
+          raca: "Laranja",
+          genero: "Macho",
+        },
+      ],
     },
   ])
 
@@ -111,34 +117,66 @@ function Clientes () {
   }
 
   const handleNovoClienteClick = () => {
-    setExibirFormulario(!exibirFormulario)
+    setNovoCliente({ ...CLIENTE_VAZIO })
+    setEditando(null)
+    setExibirFormulario(true)
   }
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target
-    setNovoCliente((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
+    if (
+      [
+        "estado",
+        "cidade",
+        "bairro",
+        "rua",
+        "numero",
+        "complemento",
+        "cep",
+        "ddd",
+        "nomeSocial",
+      ].includes(name)
+    ) {
+      setNovoCliente((prev) => ({
+        ...prev,
+        endereco: { ...prev.endereco, [name]: value },
+      }))
+    } else {
+      setNovoCliente((prev) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }
   }
 
   const handleSalvarCliente = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const novo = {
-      ...novoCliente,
-      dataCadastro: new Date().toISOString().split("T")[0],
+    if (editando) {
+      setClientes((prev) =>
+        prev.map((c) =>
+          c === editando
+            ? {
+                ...novoCliente,
+                dataCadastro: editando.dataCadastro,
+                pets: editando.pets,
+              }
+            : c
+        )
+      )
+    } else {
+      setClientes((prevClientes) => [
+        ...prevClientes,
+        {
+          ...novoCliente,
+          dataCadastro: new Date().toISOString().split("T")[0],
+        },
+      ])
     }
-
-    setClientes((prevClientes) => [...prevClientes, novo])
-    setNovoCliente({
-      nome: "",
-      email: "",
-      telefone: "",
-      cpf: "",
-      dataCadastro: "",
-      observacoes: "",
-    })
+    setNovoCliente({ ...CLIENTE_VAZIO })
     setExibirFormulario(false)
+    setEditando(null)
   }
 
   const abrirModalDetalhes = (cliente: Cliente) => {
@@ -149,42 +187,74 @@ function Clientes () {
     setClienteSelecionado(null)
   }
 
-  const clientesFiltrados = clientes.filter((cliente) => cliente.nome.toLowerCase().includes(busca.toLowerCase()))
+  const handleEditarCliente = (cliente: Cliente) => {
+    setNovoCliente({
+      ...cliente,
+      endereco: { ...CLIENTE_VAZIO.endereco, ...cliente.endereco },
+    })
+    setEditando(cliente)
+    setExibirFormulario(true)
+  }
 
+  const handleExcluirCliente = (cliente: Cliente) => {
+    if (
+      window.confirm(
+        `Tem certeza que deseja excluir o cliente "${cliente.nome}"?`
+      )
+    ) {
+      setClientes((prev) => prev.filter((c) => c !== cliente))
+    }
+  }
+
+  const clientesFiltrados = clientes.filter((cliente) =>
+    cliente.nome.toLowerCase().includes(busca.toLowerCase())
+  )
+
+  // Layout
   return (
-    <div className="container-fluid min-vh-100 bg-dark text-light py-5">
+    <div
+      className="min-vh-100"
+      style={{ background: "#23272b", minHeight: "100vh", padding: "32px 0" }}
+    >
       <div className="container">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="mb-0">Clientes Cadastrados</h2>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="mb-0 text-light">Clientes Cadastrados</h2>
           <button
-            className="btn text-dark fw-semibold"
-            style={{ background: "#0dcaf0", border: "none" }}
+            className="btn fw-semibold"
+            style={{
+              background: "#0dcaf0",
+              color: "#222",
+              border: "none",
+              fontWeight: 600,
+            }}
             onClick={handleNovoClienteClick}
           >
-            {exibirFormulario ? (
-              "Fechar"
-            ) : (
-              <>
-                <i className="bi bi-plus-circle me-2"></i> Novo Cliente
-              </>
-            )}
+            <i className="bi bi-plus-circle me-1"></i> Novo Cliente
           </button>
         </div>
+        <input
+          type="text"
+          className="form-control mb-4"
+          placeholder="Buscar por nome..."
+          value={busca}
+          onChange={handleBuscaChange}
+          style={{ fontSize: "1.1rem" }}
+        />
 
-        <div className="input-group mb-4">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Buscar por nome..."
-            value={busca}
-            onChange={handleBuscaChange}
-          />
-        </div>
-
+        {/* Formulário */}
         {exibirFormulario && (
-          <div className="card mb-4 bg-white text-dark">
+          <div
+            className="card mb-4"
+            style={{
+              background: "#fff",
+              borderRadius: 10,
+              boxShadow: "0 2px 8px #0001",
+            }}
+          >
             <div className="card-body">
-              <h5 className="card-title">Cadastrar Novo Cliente</h5>
+              <h4 className="mb-4 fw-semibold">
+                {editando ? "Editar Cliente" : "Cadastrar Novo Cliente"}
+              </h4>
               <form onSubmit={handleSalvarCliente}>
                 <div className="row">
                   <div className="col-md-6 mb-3">
@@ -199,6 +269,16 @@ function Clientes () {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
+                    <label className="form-label">Nome Social (opcional)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="nomeSocial"
+                      value={novoCliente.endereco?.nomeSocial || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
                     <label className="form-label">E-mail</label>
                     <input
                       type="email"
@@ -209,7 +289,17 @@ function Clientes () {
                       required
                     />
                   </div>
-                  <div className="col-md-6 mb-3">
+                  <div className="col-md-2 mb-3">
+                    <label className="form-label">DDD</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="ddd"
+                      value={novoCliente.endereco?.ddd || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-4 mb-3">
                     <label className="form-label">Telefone</label>
                     <input
                       type="text"
@@ -218,6 +308,76 @@ function Clientes () {
                       value={novoCliente.telefone}
                       onChange={handleInputChange}
                       required
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Estado</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="estado"
+                      value={novoCliente.endereco?.estado || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Cidade</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="cidade"
+                      value={novoCliente.endereco?.cidade || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Bairro</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="bairro"
+                      value={novoCliente.endereco?.bairro || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Rua</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="rua"
+                      value={novoCliente.endereco?.rua || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label">Número</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="numero"
+                      value={novoCliente.endereco?.numero || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label">Complemento</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="complemento"
+                      value={novoCliente.endereco?.complemento || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">CEP</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="cep"
+                      value={novoCliente.endereco?.cep || ""}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="col-md-6 mb-3">
@@ -242,7 +402,7 @@ function Clientes () {
                   </div>
                   <div className="col-12 text-end">
                     <button type="submit" className="btn btn-success">
-                      Salvar Cliente
+                      {editando ? "Salvar Alterações" : "Salvar Cliente"}
                     </button>
                   </div>
                 </div>
@@ -251,31 +411,48 @@ function Clientes () {
           </div>
         )}
 
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {/* Cards */}
+        <div className="row g-4">
           {clientesFiltrados.map((cliente, index) => (
-            <div key={index} className="col">
-              <div className="card shadow-sm h-100 bg-white text-dark border-0">
+            <div key={index} className="col-12 col-md-6 col-lg-4">
+              <div
+                className="card h-100"
+                style={{
+                  borderRadius: 10,
+                  background: "#fff",
+                  boxShadow: "0 2px 8px #0001",
+                }}
+              >
                 <div className="card-body">
-                  <h5 className="card-title">{cliente.nome}</h5>
-                  <p>
+                  <h5 className="card-title mb-2">{cliente.nome}</h5>
+                  <p className="mb-1">
                     <strong>E-mail:</strong> {cliente.email}
                   </p>
-                  <p>
-                    <strong>Telefone:</strong> {cliente.telefone}
-                  </p>
-                  <p>
-                    <strong>CPF:</strong> {cliente.cpf}
-                  </p>
-                  <p>
-                    <strong>Data de Cadastro:</strong> {cliente.dataCadastro}
-                  </p>
-                  <p>
-                    <strong>Observações:</strong> {cliente.observacoes}
+                  <p className="mb-1">
+                    <strong>Data de Cadastro:</strong>{" "}
+                    {new Date(cliente.dataCadastro).toLocaleDateString("pt-BR")}
                   </p>
                 </div>
-                <div className="card-footer text-center bg-white border-0">
-                  <button className="btn btn-outline-dark btn-sm" onClick={() => abrirModalDetalhes(cliente)}>
+                <div className="card-footer bg-white border-0 d-flex justify-content-center gap-2">
+                  <button
+                    className="btn btn-outline-dark btn-sm"
+                    onClick={() => abrirModalDetalhes(cliente)}
+                  >
                     Ver Detalhes
+                  </button>
+                  <button
+                    className="btn btn-warning btn-sm"
+                    title="Editar"
+                    onClick={() => handleEditarCliente(cliente)}
+                  >
+                    <i className="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    title="Excluir"
+                    onClick={() => handleExcluirCliente(cliente)}
+                  >
+                    <i className="bi bi-trash"></i>
                   </button>
                 </div>
               </div>
@@ -285,35 +462,112 @@ function Clientes () {
 
         {/* Modal de Detalhes */}
         {clienteSelecionado && (
-          <div className="modal fade show d-block" tabIndex={-1} style={{ background: "rgba(0,0,0,0.5)" }}>
+          <div
+            className="modal fade show d-block"
+            tabIndex={-1}
+            style={{
+              background: "rgba(0,0,0,0.5)",
+              zIndex: 1050,
+            }}
+          >
             <div className="modal-dialog">
               <div className="modal-content bg-white text-dark">
                 <div className="modal-header">
-                  <h5 className="modal-title">Detalhes do Cliente</h5>
-                  <button type="button" className="btn-close" onClick={fecharModalDetalhes}></button>
+                  <h5 className="modal-title fw-semibold">
+                    Detalhes do Cliente
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={fecharModalDetalhes}
+                  ></button>
                 </div>
                 <div className="modal-body">
                   <p>
                     <strong>Nome:</strong> {clienteSelecionado.nome}
                   </p>
+                  {clienteSelecionado.email && (
+                    <p>
+                      <strong>E-mail:</strong> {clienteSelecionado.email}
+                    </p>
+                  )}
                   <p>
-                    <strong>E-mail:</strong> {clienteSelecionado.email}
+                    <strong>Data de Cadastro:</strong>{" "}
+                    {new Date(
+                      clienteSelecionado.dataCadastro
+                    ).toLocaleDateString("pt-BR")}
                   </p>
-                  <p>
-                    <strong>Telefone:</strong> {clienteSelecionado.telefone}
-                  </p>
+                  {clienteSelecionado.telefone && (
+                    <p>
+                      <strong>Telefone:</strong>{" "}
+                      {clienteSelecionado.endereco?.ddd
+                        ? `(${clienteSelecionado.endereco.ddd}) `
+                        : ""}
+                      {clienteSelecionado.telefone}
+                    </p>
+                  )}
                   <p>
                     <strong>CPF:</strong> {clienteSelecionado.cpf}
                   </p>
-                  <p>
-                    <strong>Data de Cadastro:</strong> {clienteSelecionado.dataCadastro}
-                  </p>
-                  <p>
-                    <strong>Observações:</strong> {clienteSelecionado.observacoes}
-                  </p>
+                  {/* Endereço */}
+                  {(clienteSelecionado.endereco?.rua ||
+                    clienteSelecionado.endereco?.numero ||
+                    clienteSelecionado.endereco?.bairro ||
+                    clienteSelecionado.endereco?.cidade ||
+                    clienteSelecionado.endereco?.estado ||
+                    clienteSelecionado.endereco?.cep ||
+                    clienteSelecionado.endereco?.complemento) && (
+                    <>
+                      <strong>Endereço:</strong>
+                      <ul className="mb-2">
+                        <li>
+                          {clienteSelecionado.endereco?.rua
+                            ? clienteSelecionado.endereco.rua
+                            : ""}
+                          {clienteSelecionado.endereco?.numero
+                            ? `, ${clienteSelecionado.endereco.numero}`
+                            : ""}
+                          {clienteSelecionado.endereco?.bairro
+                            ? ` - ${clienteSelecionado.endereco.bairro}`
+                            : ""}
+                          {clienteSelecionado.endereco?.cidade
+                            ? `, ${clienteSelecionado.endereco.cidade}`
+                            : ""}
+                          {clienteSelecionado.endereco?.estado
+                            ? ` - ${clienteSelecionado.endereco.estado}`
+                            : ""}
+                          {clienteSelecionado.endereco?.cep
+                            ? `, CEP: ${clienteSelecionado.endereco.cep}`
+                            : ""}
+                          {clienteSelecionado.endereco?.complemento
+                            ? ` (${clienteSelecionado.endereco.complemento})`
+                            : ""}
+                        </li>
+                      </ul>
+                    </>
+                  )}
+                  {/* Pets */}
+                  {clienteSelecionado.pets && clienteSelecionado.pets.length > 0 && (
+                    <>
+                      <strong>Pets:</strong>
+                      <ul>
+                        {clienteSelecionado.pets.map((pet, i) => (
+                          <li key={i}>
+                            <strong>Nome:</strong> {pet.nome} |{" "}
+                            <strong>Tipo:</strong> {pet.tipo} |{" "}
+                            <strong>Raça:</strong> {pet.raca} |{" "}
+                            <strong>Gênero:</strong> {pet.genero}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
                 <div className="modal-footer bg-white">
-                  <button className="btn btn-secondary" onClick={fecharModalDetalhes}>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={fecharModalDetalhes}
+                  >
                     Fechar
                   </button>
                 </div>

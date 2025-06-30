@@ -62,6 +62,14 @@ function Servicos () {
     fecharModal()
   }
 
+  // Função para excluir serviço
+  const handleExcluirServico = (servico: Servico) => {
+    if (window.confirm(`Tem certeza que deseja excluir o serviço "${servico.nome}"?`)) {
+      setServicos((prev) => prev.filter((s) => s.id !== servico.id))
+      fecharModal()
+    }
+  }
+
   const abrirModal = (servico: Servico, editar: boolean) => {
     setServicoSelecionado(editar ? null : servico)
     setNovoServico(editar ? { ...servico } : novoServico)
@@ -116,6 +124,9 @@ function Servicos () {
                   </button>
                   <button className="btn btn-outline-warning btn-sm" onClick={() => abrirModal(s, true)}>
                     <i className="bi bi-pencil"></i>
+                  </button>
+                  <button className="btn btn-outline-danger btn-sm" onClick={() => handleExcluirServico(s)}>
+                    <i className="bi bi-trash"></i>
                   </button>
                 </div>
               </div>
@@ -209,6 +220,14 @@ function Servicos () {
                         <p>
                           <strong>Duração:</strong> {servicoSelecionado.duracao}
                         </p>
+                        <div className="text-end">
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => handleExcluirServico(servicoSelecionado)}
+                          >
+                            <i className="bi bi-trash me-1"></i> Excluir
+                          </button>
+                        </div>
                       </div>
                     )
                   )}
